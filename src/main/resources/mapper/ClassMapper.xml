@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jetsen.enroll.dao.mapper.ClassMapper">
+    <resultMap id="BaseResultMap" type="com.jetsen.enroll.dao.domain.Class">
+        <!--@mbg.generated-->
+        <!--@Table "CLASS"-->
+        <id column="CLASS_ID" jdbcType="INTEGER" property="classId"/>
+        <result column="CLASS_NAME" jdbcType="VARCHAR" property="className"/>
+        <result column="LEADER" jdbcType="VARCHAR" property="leader"/>
+        <collection property="members" select="getMembers" column="CLASS_ID">
+        </collection>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        CLASS_ID, CLASS_NAME, LEADER
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from "CLASS"
+        where CLASS_ID = #{classId,jdbcType=INTEGER}
+    </select>
+    <select id="getMembers" resultMap="com.jetsen.enroll.dao.mapper.MemberMapper.BaseResultMap">
+        select
+        <include refid="com.jetsen.enroll.dao.mapper.MemberMapper.Base_Column_List"/>
+        from "MEMBER"
+        where CLASS_ID= #{classId,jdbcType=INTEGER}
+    </select>
+    <select id="getClasses" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from "CLASS"
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        delete from "CLASS"
+        where CLASS_ID = #{classId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.jetsen.enroll.dao.domain.Class">
+        <!--@mbg.generated-->
+        insert into "CLASS" (CLASS_ID, CLASS_NAME, LEADER
+        )
+        values (#{classId,jdbcType=INTEGER}, #{className,jdbcType=VARCHAR}, #{leader,jdbcType=VARCHAR}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.jetsen.enroll.dao.domain.Class">
+        <!--@mbg.generated-->
+        insert into "CLASS"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="classId != null">
+                CLASS_ID,
+            </if>
+            <if test="className != null">
+                CLASS_NAME,
+            </if>
+            <if test="leader != null">
+                LEADER,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="classId != null">
+                #{classId,jdbcType=INTEGER},
+            </if>
+            <if test="className != null">
+                #{className,jdbcType=VARCHAR},
+            </if>
+            <if test="leader != null">
+                #{leader,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.jetsen.enroll.dao.domain.Class">
+        <!--@mbg.generated-->
+        update "CLASS"
+        <set>
+            <if test="className != null">
+                CLASS_NAME = #{className,jdbcType=VARCHAR},
+            </if>
+            <if test="leader != null">
+                LEADER = #{leader,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where CLASS_ID = #{classId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.jetsen.enroll.dao.domain.Class">
+        <!--@mbg.generated-->
+        update "CLASS"
+        set CLASS_NAME = #{className,jdbcType=VARCHAR},
+        LEADER = #{leader,jdbcType=VARCHAR}
+        where CLASS_ID = #{classId,jdbcType=INTEGER}
+    </update>
+</mapper>

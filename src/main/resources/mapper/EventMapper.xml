@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jetsen.enroll.dao.mapper.EventMapper">
+  <resultMap id="BaseResultMap" type="com.jetsen.enroll.dao.domain.Event">
+    <!--@mbg.generated-->
+    <!--@Table EVENT-->
+    <id column="EVENT_ID" jdbcType="INTEGER" property="eventId" />
+    <result column="EVENT_NAME" jdbcType="VARCHAR" property="eventName" />
+    <result column="EVENT_DATE" jdbcType="DATE" property="eventDate" />
+    <result column="DEADLINE" jdbcType="TIMESTAMP" property="deadline" />
+    <result column="NUMBERS" jdbcType="INTEGER" property="numbers" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    EVENT_ID, EVENT_NAME, EVENT_DATE, DEADLINE, NUMBERS
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from EVENT
+    where EVENT_ID = #{eventId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from EVENT
+    where EVENT_ID = #{eventId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="EVENT_ID" keyProperty="eventId" parameterType="com.jetsen.enroll.dao.domain.Event" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into EVENT (EVENT_NAME, EVENT_DATE, DEADLINE, 
+      NUMBERS)
+    values (#{eventName,jdbcType=VARCHAR}, #{eventDate,jdbcType=DATE}, #{deadline,jdbcType=TIMESTAMP}, 
+      #{numbers,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="EVENT_ID" keyProperty="eventId" parameterType="com.jetsen.enroll.dao.domain.Event" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into EVENT
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="eventName != null">
+        EVENT_NAME,
+      </if>
+      <if test="eventDate != null">
+        EVENT_DATE,
+      </if>
+      <if test="deadline != null">
+        DEADLINE,
+      </if>
+      <if test="numbers != null">
+        NUMBERS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="eventName != null">
+        #{eventName,jdbcType=VARCHAR},
+      </if>
+      <if test="eventDate != null">
+        #{eventDate,jdbcType=DATE},
+      </if>
+      <if test="deadline != null">
+        #{deadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="numbers != null">
+        #{numbers,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jetsen.enroll.dao.domain.Event">
+    <!--@mbg.generated-->
+    update EVENT
+    <set>
+      <if test="eventName != null">
+        EVENT_NAME = #{eventName,jdbcType=VARCHAR},
+      </if>
+      <if test="eventDate != null">
+        EVENT_DATE = #{eventDate,jdbcType=DATE},
+      </if>
+      <if test="deadline != null">
+        DEADLINE = #{deadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="numbers != null">
+        NUMBERS = #{numbers,jdbcType=INTEGER},
+      </if>
+    </set>
+    where EVENT_ID = #{eventId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jetsen.enroll.dao.domain.Event">
+    <!--@mbg.generated-->
+    update EVENT
+    set EVENT_NAME = #{eventName,jdbcType=VARCHAR},
+      EVENT_DATE = #{eventDate,jdbcType=DATE},
+      DEADLINE = #{deadline,jdbcType=TIMESTAMP},
+      NUMBERS = #{numbers,jdbcType=INTEGER}
+    where EVENT_ID = #{eventId,jdbcType=INTEGER}
+  </update>
+</mapper>

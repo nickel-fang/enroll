@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('分组')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="select-list">
+                <ul>
+                    <li>
+                        微信昵称：<input type="text" id="memberName" name="memberName"/>
+                    </li>
+                    <li>
+                        <a class="btn btn-primary btn-rounded btn-sm" onclick="draw()"><i
+                                class="fa fa-plus"></i>抽签</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-table-reorder-js"/>
+<script th:inline="javascript">
+    var classes = [[${classes}]];
+    var canDraw = [[${canDraw}]];
+
+    $(function () {
+        $('#bootstrap-table').bootstrapTable(
+            {
+                data: classes,
+                pagination: false,
+                showSearch: false,
+                showRefresh: false,
+                showColumns: false,
+                showToggle: false,
+                columns: [
+                    {
+                        field: 'classId',
+                        title: '序号'
+                    },
+                    {
+                        field: 'className',
+                        title: '组名'
+                    },
+                    {
+                        field: 'leader',
+                        title: '队长'
+                    },
+                    {
+                        field: 'members',
+                        title: '队员',
+                        formatter: function (value, row, index) {
+                            var name = "";
+                            $.each(value, function (index, member) {
+                                name = name + "   " + member.memberName
+                            });
+                            return name.trim();
+                        }
+                    }
+                ]
+            }
+        );
+    });
+
+    function draw() {
+        var memberName = $('#memberName').val();
+        if (canDraw == 2) {
+            $.modal.alertWarning("客官莫急，抽签时间未到！");
+        } else if (canDraw == 1) {
+            $.modal.alertWarning("客官莫急， 队长未就位！");
+        } else if ($.common.isEmpty(memberName)) {
+            $.modal.alertWarning("请输入微信昵称！");
+        } else {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json;charset=UTF-8",
+                url: ctx + "/draw/" + memberName.trim(),
+                data: null,
+                dataType: "json",
+                success: function (result) {
+                    if (result == 0) {
+                        layer.msg("抽签成功！");
+                        window.location.reload();
+                    } else if (result == 1) {
+                        layer.msg("您已抽过签！");
+                    } else if (result == 2) {
+                        layer.msg("队长无须抽签！");
+                    } else if (result == 3) {
+                        layer.msg("名额已满！");
+                    }
+                }
+            });
+        }
+    }
+
+</script>
+</body>
+</html>
