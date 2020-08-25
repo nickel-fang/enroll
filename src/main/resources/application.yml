@@ -1,10 +1,10 @@
 # 开发环境配置
 server:
   # 服务器的HTTP端口，默认为80
-  port: 81
+  port: 443
   servlet:
     # 应用的访问路径
-    context-path: /enroll
+    context-path: /
   tomcat:
     # tomcat的URI编码
     uri-encoding: UTF-8
@@ -16,6 +16,8 @@ server:
     key-store: classpath:server.jks
     key-store-password: Ij1&IdQlkLXhR209
     key-store-type: JKS
+  http:
+    port: 80
 
 # 日志配置
 logging:

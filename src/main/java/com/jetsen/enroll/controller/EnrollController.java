@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
  * @date: 2020/8/17 14:08
  */
 @Controller
+@RequestMapping("/enroll")
 public class EnrollController {
     @Autowired
     private EventService eventService;
@@ -49,11 +50,11 @@ public class EnrollController {
         int canDraw = 0; //是否可以抽签
         List<Class> classes = classService.getClasses();
 
-        LocalDateTime startTime = LocalDateTime.parse("2020-08-21T12:00:00");
-        LocalDateTime now = LocalDateTime.now();
-        if (now.isBefore(startTime)) {
-            canDraw = 2;
-        }
+//        LocalDateTime startTime = LocalDateTime.parse("2020-08-21T12:00:00");
+//        LocalDateTime now = LocalDateTime.now();
+//        if (now.isBefore(startTime)) {
+//            canDraw = 2;
+//        }
 
         for (Class c : classes) {
             //如果未确定队长，不允许抽签
@@ -68,30 +69,37 @@ public class EnrollController {
         return "enroll/class";
     }
 
+    @PostMapping("/getGroups")
+    @ResponseBody
+    public List<Class> getGroups() {
+        return classService.getClasses();
+    }
+
     //抽签
     @PostMapping("/draw/{name}")
     @ResponseBody
     public int draw(@PathVariable("name") String name) {
+        //同一微信名不会出现并发情况，所以些段代码不用加锁
         Member member = memberService.selectByPrimaryKey(name);
         if (member != null) {
             //已抽过签
             return 1;
         }
 
-        List<Class> classes = classService.getClasses();
-        for (Class c : classes) {
-            if (c.getLeader().equals(name)) {
-                return 2; //队长无须抽签
-            }
-        }
-
         lock.lock();
         try {
+            List<Class> classes = classService.getClasses();
+            for (Class c : classes) {
+                if (c.getLeader().equals(name)) {
+                    return 2; //队长无须抽签
+                }
+            }
+
             //未满员的组，每组一队长，三个成员
             List<Class> cs = classes.stream()
                     .filter(c -> c.getMembers().size() < 3).collect(Collectors.toList());
 
-            if (cs == null || cs.size()==0) {
+            if (cs == null || cs.size() == 0) {
                 return 3; //名额已满
             }
             //随机取一个
