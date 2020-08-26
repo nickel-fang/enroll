@@ -29,10 +29,12 @@ create table MEMBER
     YEAR_POINT   int comment '当年总积分，累积当年参加活动及比赛的积分',
     POINT        int comment '实时积分，参加活动及比赛、约战、消费的积分',
     WIN_NUMBER   int comment '约战胜局',
-    LOSE_NUMBER  int comment '约战负局， 胜率 = WIN_NUMBER/(WIN_NUMBER+LOSE_NUMBER)',
+    LOSE_NUMBER  int comment '约战负局',
+    RATIO        smallint comment '胜率 = WIN_NUMBER/(WIN_NUMBER+LOSE_NUMBER)，取4位数，如98.33%，数据存中9833',
     SIGN_DATE    date comment '注册日期',
     primary key (MEMBER_ID),
-    key (OPENID)
+    key (OPENID),
+    key (RATIO desc, WIN_NUMBER desc)
 );
 
 --分组表，用于比赛抽签分组
