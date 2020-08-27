@@ -50,10 +50,14 @@ create table DIVISION
 );
 
 --会员报名活动关联表
+--一场活动，存在一人多报的情况，如在别处， 在别处+1， 在别处+2
 create table MEMBER_TO_ACTIVITY
 (
     MEMBER_ID   int,
-    ACTIVITY_ID int
+    MEMBER_NAME varchar(32) comment '报名列表中显示的名称，冗余字段，一人报多个时，显示+1, +2',
+    ACTIVITY_ID int,
+    ENROLL_TIME datetime comment '报名时间，按照报名时间显示排序',
+    key (ACTIVITY_ID, MEMBER_ID)
 );
 
 --会员比赛分组表
